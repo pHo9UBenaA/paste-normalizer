@@ -30,7 +30,7 @@ npm run test:watch     # run tests in watch mode
 
 ```sh
 npm run package
-code --install-extension paste-normalizer-0.0.1.vsix --force
+code --install-extension paste-normalizer-0.0.2.vsix --force
 ```
 
 ## Project Structure

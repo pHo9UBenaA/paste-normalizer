@@ -28,8 +28,17 @@ function startsWithLowercase(line: string): boolean {
   return /^[a-z]/.test(line.trimStart());
 }
 
-function hasLeadingIndent(line: string): boolean {
-  return /^[ \t]+/.test(line);
+function leadingIndentWidth(line: string): number {
+  return line.match(/^[ \t]*/)?.[0].length ?? 0;
+}
+
+function shouldJoinWithoutSpace(previous: string, next: string): boolean {
+  const prevTrimmed = previous.trimEnd();
+  return (
+    /[、。！？：]/.test(prevTrimmed) &&
+    /[A-Za-z0-9]$/.test(prevTrimmed) &&
+    /^[A-Za-z0-9]/.test(next)
+  );
 }
 
 function computeCommonIndent(lines: string[]): number {
@@ -147,6 +156,11 @@ export function normalizeClaudeText(input: string): string {
 
     // Reflow: join with previous output line if conditions met
     const lastIdx = outputLines.length - 1;
+    const indentWidth = leadingIndentWidth(processed);
+    const looksIndentedContinuation =
+      indentWidth >= 4 ||
+      (indentWidth > 0 &&
+        (outputLines[lastIdx]?.includes(" ") || outputLines[lastIdx]?.length >= 20));
     if (
       lastIdx >= 0 &&
       !isBlank(outputLines[lastIdx]) &&
@@ -154,12 +168,21 @@ export function normalizeClaudeText(input: string): string {
       !isListItem(outputLines[lastIdx]) &&
       !isCodeFence(outputLines[lastIdx]) &&
       !endsWithBreak(outputLines[lastIdx]) &&
-      outputLines[lastIdx].includes(" ") &&
-      (startsWithLowercase(processedForJoin) || hasLeadingIndent(processed)) &&
+      (
+        (startsWithLowercase(processedForJoin) &&
+          outputLines[lastIdx].includes(" ")) ||
+        looksIndentedContinuation
+      ) &&
       !isHeading(processedForJoin) &&
       !isListItem(processedForJoin)
     ) {
-      outputLines[lastIdx] += " " + processedForJoin;
+      const separator = shouldJoinWithoutSpace(
+        outputLines[lastIdx],
+        processedForJoin
+      )
+        ? ""
+        : " ";
+      outputLines[lastIdx] += separator + processedForJoin;
     } else {
       const prev = outputLines[lastIdx];
       const isParagraphStart =

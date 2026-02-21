@@ -2,7 +2,7 @@
   "name": "paste-normalizer",
   "displayName": "Paste Normalizer",
   "description": "Normalize pasted Claude output in the active editor",
-  "version": "0.0.1",
+  "version": "0.0.2",
   "publisher": "pHo9UBenaA",
   "repository": {
     "type": "git",

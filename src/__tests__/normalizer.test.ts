@@ -147,6 +147,11 @@ describe("normalizeClaudeText", () => {
       "first part,\ncontinued."
     );
   });
+  test("joins indented japanese-context continuation without space", () => {
+    expect(normalizeClaudeText("xxxx？aaaaaaaaa、bbbb\n      ccccccc")).toBe(
+      "xxxx？aaaaaaaaa、bbbbccccccc"
+    );
+  });
 
   // Cycle 10: Integration Test
   test("processes real Claude output with multiple features", () => {
