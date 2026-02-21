@@ -1,0 +1,50 @@
+{
+  "name": "paste-normalizer",
+  "displayName": "Paste Normalizer",
+  "description": "Normalize pasted Claude output in the active editor",
+  "version": "0.0.1",
+  "publisher": "pHo9UBenaA",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/pHo9UBenaA/paste-normalizer"
+  },
+  "keywords": [
+    "normalize",
+    "paste",
+    "claude",
+    "ai",
+    "indentation",
+    "markdown",
+    "formatting"
+  ],
+  "engines": {
+    "vscode": "^1.109.0"
+  },
+  "categories": [
+    "Other"
+  ],
+  "activationEvents": [],
+  "main": "./out/extension.js",
+  "contributes": {
+    "commands": [
+      {
+        "command": "pasteNormalizer.normalizeClaudeOutput",
+        "title": "Paste Normalizer: Normalize Pasted Claude Output"
+      }
+    ]
+  },
+  "scripts": {
+    "compile": "tsc -p ./",
+    "watch": "tsc -watch -p ./",
+    "test": "vitest run",
+    "test:watch": "vitest",
+    "package": "npx @vscode/vsce package --allow-missing-repository"
+  },
+  "devDependencies": {
+    "@types/node": "^25.3.0",
+    "@types/vscode": "^1.109.0",
+    "fast-check": "^4.5.3",
+    "typescript": "^5.9.3",
+    "vitest": "^4.0.18"
+  }
+}
